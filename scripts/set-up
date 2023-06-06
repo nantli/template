@@ -1,0 +1,100 @@
+#!/bin/bash
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐ 
+# │   _____________   ___  ______  _      ______________ __  _      ____ ____  __│▓
+# │  / __/_  __/ _ | / _ \/_  __/ | | /| / /  _/_  __/ // / | | /| / / // /\ \/ /│▓
+# │ _\ \  / / / __ |/ , _/ / /    | |/ |/ // /  / / / _  /  | |/ |/ / _  /  \  / │▓
+# │/___/ /_/ /_/ |_/_/|_| /_/     |__/|__/___/ /_/ /_//_/   |__/|__/_//_/   /_/  │▓
+# └──────────────────────────────────────────────────────────────────────────────┘▓
+#  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+# [WHY]
+# "it exists?" = """A Python virtual environment and specific tools are required to
+# develop with this repository; a script is convenient for setting up and installing
+# everything."""
+# [WHAT]
+# "it does?" = """It Creates a Python virtual environment and install programs like
+# Make and Gum."""
+# [WHEN]
+# "to use it?" = "Right before starting development with this repository."
+#  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+# Print usage when -h or --help flag is set
+if [ "$1" == "-h" ] || [ "$1" == "--help" ]; then
+    echo ""
+    echo "Usage: $ set-up --os=macos"
+    echo ""
+    echo "For the moment only macOS is supported"
+    echo ""
+    exit 0
+fi
+
+# Print right emoji for OS, it accepts only one argument, the OS
+# Example: print_os_emoji macos
+print_os_emoji() {
+    if [ "$1" == "macos" ]; then
+        echo "🍎"
+    fi
+}
+
+# Make sure --os= option is set ( e.g. --os=macos )
+os_option=$(echo "$@" | grep -o "\-\-os=[a-z]*" | cut -d "=" -f 2)
+if [ -z "$os_option" ]; then
+    echo ""
+    echo "🚨・No --os= option set. Exiting..."
+    echo ""
+    exit 1
+fi
+echo ""
+echo "💻・OS: $os_option $(print_os_emoji $os_option)"
+echo ""
+
+# Install Gum if it doesn't exist
+# WHY? Gum is used to beautify shell scripts
+if ! command -v gum &> /dev/null
+then
+    echo "🍬・Gum could not be found. Installing..."
+    if [ "$os_option" == "macos" ]; then
+        brew install gum
+    fi
+    echo ""
+    echo "Done 🪇"
+    echo ""
+else
+    echo "🍬・Gum is already installed. Skipping..."
+    echo ""
+    echo "Done 🪇"
+    echo ""
+fi
+
+# Create Python virtual environment if it doesn't exist
+if [ ! -d "venv" ]; then
+    echo "🐍・Python virtual environment does not exist. Creating..."
+    gum spin --spinner monkey --title "Creating virtual environment" -- python3 -m venv venv
+    echo ""
+    echo "Done 🪇"
+    echo ""
+else
+    echo "🐍・Python virtual environment already exists. Skipping..."
+    echo ""
+    echo "Done 🪇"
+    echo ""
+fi
+
+# Install Make if it doesn't exist
+# WHY? Make is used to orchestrate development tasks and build the project
+if ! command -v make &> /dev/null
+then
+    echo "🛠・Make could not be found. Installing..."
+    echo ""
+    if [ "$os_option" == "macos" ]; then
+        gum spin --spinner monkey --title "Creating virtual environment" --brew install make
+    fi
+    echo ""
+    echo "Done 🪇"
+    echo ""
+else
+    echo "🛠・Make is already installed. Skipping..."
+    echo ""
+    echo "Done 🪇"
+    echo ""
+fi

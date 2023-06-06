@@ -1,0 +1,16 @@
+name = "template"
+org = "@nantli"
+brief = "A template for repositories."
+creation ="2023-06-06"
+[WHY]
+"it exists?" = """Because an easy way to kick-start a repository is conveni-
+ent and valuable."""
+[WHAT]
+"it does?" = """It kickstarts a repository, with pre-commit hooks, rules for
+commit messages, and for code style. Additionally, it includes files
+needed in every repository in the organization."""
+[WHEN]
+"to use?" = "At creation of a new repository."
+[[maintainers]]
+name = "Rolando Sotelo Alarcon"
+email = "rola@hey.com"

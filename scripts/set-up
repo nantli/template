@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# ┌──────────────────────────────────────────────────────────────────────────────┐ 
+# ┌──────────────────────────────────────────────────────────────────────────────┐
 # │   _____________   ___  ______  _      ______________ __  _      ____ ____  __│▓
 # │  / __/_  __/ _ | / _ \/_  __/ | | /| / /  _/_  __/ // / | | /| / / // /\ \/ /│▓
 # │ _\ \  / / / __ |/ , _/ / /    | |/ |/ // /  / / / _  /  | |/ |/ / _  /  \  / │▓
@@ -8,12 +8,10 @@
 # └──────────────────────────────────────────────────────────────────────────────┘▓
 #  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
 # [WHY]
-# "it exists?" = """A Python virtual environment and specific tools are required to
-# develop with this repository; a script is convenient for setting up and installing
-# everything."""
+# "it exists?" = """Specific tools are required to develop with this repository; a
+# script is convenient for setting up and installing everything."""
 # [WHAT]
-# "it does?" = """It Creates a Python virtual environment and install programs like
-# Make and Gum."""
+# "it does?" = "It install programs like Make and Gum."
 # [WHEN]
 # "to use it?" = "Right before starting development with this repository."
 #  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
@@ -61,20 +59,6 @@ then
     echo ""
 else
     echo "🍬・Gum is already installed. Skipping..."
-    echo ""
-    echo "Done 🪇"
-    echo ""
-fi
-
-# Create Python virtual environment if it doesn't exist
-if [ ! -d "venv" ]; then
-    echo "🐍・Python virtual environment does not exist. Creating..."
-    gum spin --spinner monkey --title "Creating virtual environment" -- python3 -m venv venv
-    echo ""
-    echo "Done 🪇"
-    echo ""
-else
-    echo "🐍・Python virtual environment already exists. Skipping..."
     echo ""
     echo "Done 🪇"
     echo ""

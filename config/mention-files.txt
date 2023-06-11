@@ -1,0 +1,22 @@
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │   _____________   ___  ______  _      ______________ __  _      ____ ____  __│▓
+# │  / __/_  __/ _ | / _ \/_  __/ | | /| / /  _/_  __/ // / | | /| / / // /\ \/ /│▓
+# │ _\ \  / / / __ |/ , _/ / /    | |/ |/ // /  / / / _  /  | |/ |/ / _  /  \  / │▓
+# │/___/ /_/ /_/ |_/_/|_| /_/     |__/|__/___/ /_/ /_//_/   |__/|__/_//_/   /_/  │▓
+# └──────────────────────────────────────────────────────────────────────────────┘▓
+#  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+# [WHY]
+# "it exists?" = """To keep track of changes to important and/or critial files. So
+# they need to be mentioned inside commit messages for example."""
+# [WHEN]
+# "to edit it?" = "If you have files which unnoticed changes could have a negative
+# impact. Please ensure that you do not overcrowd this file."
+#  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+WHY.toml
+LICENSE.txt
+.gitlint
+.pre-commit-config.yaml
+.envrc
+Makefile
+scripts/set-up
+scripts/commit

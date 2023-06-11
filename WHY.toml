@@ -11,6 +11,3 @@ commit messages, and for code style. Additionally, it includes files
 needed in every repository in the organization."""
 [WHEN]
 "to use?" = "At creation of a new repository."
-[[maintainers]]
-name = "Rolando Sotelo Alarcon"
-email = "rola@hey.com"

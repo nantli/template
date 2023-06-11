@@ -1,0 +1,181 @@
+#!/bin/bash
+
+# ┌──────────────────────────────────────────────────────────────────────────────┐
+# │   _____________   ___  ______  _      ______________ __  _      ____ ____  __│▓
+# │  / __/_  __/ _ | / _ \/_  __/ | | /| / /  _/_  __/ // / | | /| / / // /\ \/ /│▓
+# │ _\ \  / / / __ |/ , _/ / /    | |/ |/ // /  / / / _  /  | |/ |/ / _  /  \  / │▓
+# │/___/ /_/ /_/ |_/_/|_| /_/     |__/|__/___/ /_/ /_//_/   |__/|__/_//_/   /_/  │▓
+# └──────────────────────────────────────────────────────────────────────────────┘▓
+#  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+# [WHY]
+# "it exists?" = """Developers must adhere to conventional commits and purpose 
+# commits, and having a user-friendly and seamless interface is crucial to 
+# achieving this. The optimal solution is to have a dedicated script for this 
+# purpose."""
+# [WHAT]
+# "it does?" = "Commit changes with a message that follows the rules."
+# [WHEN]
+# "to use it?" = "Every time you want to commit changes."
+#  ▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓
+
+# Function to get emoji/word before ・ symbol, for example 🚧 from 🚧・WIP
+get_before_emoji() {
+    echo "$1" | cut -d "・" -f 1
+}
+
+# Read --edit from first argument
+# WHY: Some times you want to edit the commit message before commiting
+if [ "$1" == "--edit" ]; then
+    EDIT=true
+fi
+
+# Exit if there are no staged changes
+STAGED=$(git diff --cached --name-only)
+if [ -z "$STAGED" ]; then
+    echo "🚨・No staged changes found."
+    exit 1
+fi
+
+# Make sure commit-scopes.txt has a line for WHY scope
+# WHY: We need a WHY scope to commit changes adding Purspose sections
+WHY_SCOPE=$(cat config/commit-scopes.txt | grep -v '^#' | grep WHY | cut -d "・" -f 1)
+if [ "$(echo "$WHY_SCOPE" | wc -l)" -gt 1 ]; then
+    echo "🚨・No WHY scope was found in commit-scopes.txt, remember to not write 'WHY' in any other line."
+    exit 1
+fi
+
+# Show Logo and staged changes
+cat config/art.txt |  gum style --foreground 212 --align center --margin "0 5"
+git status --short | grep -v '^ ' | gum style --foreground 212 --margin "1 5"
+gum confirm "Do you want to continue with these staged changes?" && echo "Comitting changes ⬆️" || exit 1
+echo ""
+
+# Select commit type (feat, fix, chore, etc)
+# WHY: To adhere to conventional commits
+selection=$(cat config/commit-types.txt | grep -v '^#' | gum choose)
+type_with_spaces=$(get_before_emoji "$selection")
+TYPE=$(echo "$type_with_spaces" | xargs)
+if [ -z "$TYPE" ]; then
+    echo "Type cannot be empty"
+    exit 1
+fi
+
+# Select one scope from the list in commit-scopes.txt
+# WHY: To more easily categorize changes
+if [ "$TYPE" == "feat" ]; then
+    selection=$(cat config/commit-scopes.txt | grep -v '^#' | grep feat | gum choose)
+    SCOPE=$(get_before_emoji "$selection")
+fi
+if [ "$TYPE" == "chore" ]; then
+    selection=$(cat config/commit-scopes.txt | grep -v '^#' | grep chore | gum choose)
+    SCOPE=$(get_before_emoji "$selection")
+fi
+if [ "$TYPE" == "fix" ]; then
+    selection=$(cat config/commit-scopes.txt | grep -v '^#' | grep fix | gum choose)
+    SCOPE=$(get_before_emoji "$selection")
+fi
+
+# If scope is WHY, then avoid unnecessary steps
+# WHY: To reduce friction when adding purpose sections
+if [ "$SCOPE" == $WHY_SCOPE ]; then
+    SUMMARY="$TYPE($SCOPE): start with why"
+    FILES=$(git diff --cached --name-only | tr '\n' ',' | sed 's/,$//g')
+    FILES=$(echo "$FILES" | sed 's/,/, /g')
+    # if more that one file and 'and' before last file
+    FILES=$(echo "$FILES" | sed 's/\(.*\), /\1 and /')
+    DESCRIPTION="Add purpose sections to $FILES.\n\n"
+    DESCRIPTION=$(echo "$DESCRIPTION" | fold -w 50 -s)
+fi
+
+# For all other scopes
+if [ "$SCOPE" != $WHY_SCOPE ]; then
+
+    # Add a summary
+    test -n "$SCOPE" && SCOPE="($SCOPE)"
+    SUMMARY=$(gum input --value "$TYPE$SCOPE: " --placeholder "Summary of this change" --char-limit 55 --header="Commit message" --prompt="> " )
+    if [ -z "$SUMMARY" ]; then
+        echo "Summary cannot be empty"
+        exit 1
+    fi
+    if [ ${#SUMMARY} -gt 55 ]; then
+        echo "Summary cannot be more than 55 characters"
+        exit 1
+    fi
+
+    # Add a WHY trailer
+    # WHY: To adhere to purpose commits
+    why_not_ready=$(gum write --placeholder "Type why this change is needed..." --header="Why? (Press CTRL+D when done)")
+    if [ -z "$why_not_ready" ] && [ "$SCOPE" != $WHY_SCOPE ]; then
+        echo "'WHY' trailer cannot be empty"
+        exit 1
+    fi
+    WHY=$(echo "WHY: $why_not_ready" | tr '\n' ' ' | fold -w 50 -s)
+    WHY="$WHY\n\n"
+
+    # Add a description (optional)
+    description_not_ready=$(gum write --placeholder "More details about the change..." --header="Description")
+    if [ -n "$description_not_ready" ]; then
+        DESCRIPTION=$(echo "$description_not_ready" | tr '\n' ' ' | fold -w 50 -s)
+        DESCRIPTION="$DESCRIPTION\n\n"
+    fi
+
+    # Mention notable files in the commit
+    # WHY: Notable files must be mentioned in the commit message when they are modified
+    for file in $(git diff --cached --name-only); do
+        WHY_MODIFIED=""
+        if grep -q "$file" config/mention-files.txt; then
+            what_modified_not_ready=$(gum input --value "📄 $file: " --placeholder "What did you modify?" --char-limit 50 --header="What was modified in $file?" --prompt="> ")
+            WHAT_MODIFIED=$(echo "$what_modified_not_ready" | fold -w 55 -s)
+            why_modified_not_ready=$(gum write --placeholder "Why was $file modified?" --header="Why was 📄 $file modified?")
+            if [ -n "$why_modified_not_ready" ]; then
+                WHY_MODIFIED=$(echo "$why_modified_not_ready" | tr '\n' ' ' | fold -w 50 -s)
+                WHY_MODIFIED="WHY: $WHY_MODIFIED\n"
+            fi
+            MENTION_FILES="$MENTION_FILES\n$WHAT_MODIFIED\n$WHY_MODIFIED"
+        fi
+    done
+    if [ -n "$MENTION_FILES" ]; then
+        MENTION_FILES_HEADER="Modified notable files:\n"
+        MENTION="$MENTION_FILES_HEADER$MENTION_FILES\n"
+    fi
+
+    # Add co-authors
+    if [ "$TYPE" == "feat" ] || [ "$TYPE" == "fix" ]; then
+        if [ -n "$(cat config/contributors.txt | grep -v '^#' | grep -v $(git config user.email))" ]; then
+            if gum confirm "Add co-authors?"; then
+                co_authors_not_ready=$(cat config/contributors.txt | grep -v '^#' | grep -v $(git config user.email) | gum filter --no-limit --header="Select Co-Authors (Use TAB to select multiple Co-authors)" --prompt="> ")
+                if [ -n "$co_authors_not_ready" ]; then
+                    CO_AUTHORS="\n"
+                    IFS=$'\n'
+                    for co_author_line in $co_authors_not_ready; do
+                        names=$(echo "$co_author_line" | cut -d '|' -f 1)
+                        names=$(echo "$names" | sed 's/ *$//g')
+                        email=$(echo "$co_author_line" | cut -d '|' -f 2)
+                        email=$(echo "$email" | sed 's/ //g')
+                        co_author_formatted="$names <$email>"
+                        CO_AUTHOR_TRAILER="Co-authored-by: $co_author_formatted\n"
+                        CO_AUTHORS="$CO_AUTHORS$CO_AUTHOR_TRAILER"
+                    done
+                fi
+            fi
+        fi
+    fi
+
+fi
+
+# Put it all together
+SIGN="Signed-off-by: $(git config user.name) <$(git config user.email)>\n"
+FOOTER="$CO_AUTHORS$SIGN"
+BODY="$WHY$DESCRIPTION$MENTION$FOOTER"
+COMMIT_MESSAGE="$SUMMARY\n\n$BODY"
+COMMIT_MESSAGE=$(echo "$COMMIT_MESSAGE" | sed 's/ *$//g')
+
+if [ "$EDIT" == true ]; then
+    echo -e "$COMMIT_MESSAGE" > .git/COMMIT_EDITMSG
+    $EDITOR .git/COMMIT_EDITMSG
+    git commit -F .git/COMMIT_EDITMSG 
+else
+    echo -e "$COMMIT_MESSAGE" | gum style --foreground 212 --margin "1 5"
+    echo -e "$COMMIT_MESSAGE" > .git/COMMIT_EDITMSG
+    gum confirm "Commit changes?" && git commit -F .git/COMMIT_EDITMSG
+fi

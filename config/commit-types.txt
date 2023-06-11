@@ -1,0 +1,3 @@
+feat    ・ New feature 🌟               | Correlates with MINOR in Semantic Versioning
+chore   ・ For all other tasks 🧰       | For commits not adding features nor fixing anything
+fix     ・ This commit patches a bug 🐛 | Correlates with PATCH in Semantic Versioning

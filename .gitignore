@@ -1,1 +1,5 @@
 /.direnv/
+/bin/
+/.buf-cache/
+/.notebook/
+.env

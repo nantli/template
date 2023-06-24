@@ -1,13 +1,17 @@
-🪅・ Generic                | Use it for everything else                                                    - feat
+🏄・ Generic                | Use it for everything else                                                    - feat
 👗・ Frontend               | Use this when working on user facing tasks e.g. Websites and Mobile apps      - feat
 📺・ Backend                | Use this for non user facing tasks e.g. Servers and APIs                      - feat
 🏎️・ Performance            | Use it for performance improvements                                           - feat
 🏗️・ Infrastructure         | Use this for anything related to infrastrure e.g. Terraform, Kubernetes       - feat
+🔑・ Security               | Use this for anything related to authentication and authorization             - feat
+💾・ Storage                | Use this for anything related to storage e.g. Databases, Schemas              - feat
 🚧・ WIP                    | Use it whe need to commit but your work is still in progress                  - chore
 💻・ Developer Experience   | Use it when improving the workflow for developers working on this repository  - chore
 🔍・ Discoverability        | Use it when maintaining and updating discoverability e.g. README.md           - chore
 📚・ Documentation          | Use it for everything Documentation                                           - chore
 🛠️・ Configuration          | Use it when modifying configuration files e.g. package.json                   - chore
-🌵・ WHY                    | Use it for tasks having to do with Purpose Development                        - chore
+🧼・ Lint Code              | Use it when linting code to follow guidelines                                 - chore
+🪄・ Refactor Code          | Use it when refactoring code without adding new functionality                 - chore
+🌊・ WHY                    | Use it for tasks having to do with Purpose Development                        - chore
 📜・ Legal stuff            | Use it for boring but necessary legal and other stuff e.g. LICENSE.txt        - chore
 🚑・ Generic                | Use if for every fix

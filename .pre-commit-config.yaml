@@ -16,7 +16,9 @@ repos:
       - id: forbid-crlf
       - id: remove-crlf
       - id: forbid-tabs
+        exclude: '\.go$'
       - id: remove-tabs
+        exclude: '\.go$'
 -   repo: https://github.com/jorisroovers/gitlint
     rev:  v0.19.1
     hooks:

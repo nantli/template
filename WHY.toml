@@ -1,7 +1,7 @@
 name = "template"
-org = "@nantli"
+org = "@DevHuxAI"
 brief = "A template for repositories."
-creation ="2023-06-06"
+creation ="2023-06-12"
 [WHY]
 "it exists?" = """Because an easy way to kick-start a repository is conveni-
 ent and valuable."""

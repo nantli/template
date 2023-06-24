@@ -69,7 +69,7 @@ min-length=20
 [title-match-regex]
 # python-style regex that the commit-msg title must match
 # Note that the regex can contradict with other rules if not used correctly
-regex=^\w+(\((🚧|🏗️|🦖|👗|🛠️|🚀|📜|🔍|🏄|💻|📺|🕹️|📚|🛎️|🚑|🏎️|🌊|🧼|🪄|🔑|💾)\))?!?:\s.*
+regex=^\w+(\((🚧|🏗️|🦖|👗|🛠️|🚀|📜|📝|🪅|💻|📺|🕹️|📚|🛎️|🚑|🏎️|🌵)\))?!?:\s.*
 
 # [body-max-line-length]
 # line-length=72
@@ -87,7 +87,7 @@ regex=^\w+(\((🚧|🏗️|🦖|👗|🛠️|🚀|📜|🔍|🏄|💻|📺|🕹�
 # This is useful for when developers often erroneously edit certain files or git submodules.
 # By specifying this rule, developers can only change the file when they explicitly reference
 # it in the commit message.
-files=WHY.toml,LICENSE.txt,.gitlint,.pre-commit-config.yaml,.envrc,Makefile
+files=WHY.toml,LICENSE.txt,.gitlint,.pre-commit-config.yaml,.envrc,Makefile,scripts/set-up
 
 [body-match-regex]
 # python-style regex that the commit-msg body must match.
@@ -101,7 +101,7 @@ regex=^WHY: (.*)
 [ignore-by-title]
 # Ignore certain rules for commits of which the title matches a regex
 # E.g. Match commit titles that start with "Release"
-regex=^chore\(🌊\): (.*)
+regex=^chore\(🌵\): (.*)
 
 # Ignore certain rules, you can reference them by their id or by their full name
 # Use 'all' to ignore all rules
